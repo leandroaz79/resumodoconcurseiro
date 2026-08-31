@@ -54,7 +54,7 @@ function ProdutoPage() {
           <img
             src={produto.capa}
             alt={`Capa do ${produto.nome}`}
-            className="aspect-4/5 w-full object-cover"
+            className="aspect-square w-full object-cover"
           />
         </div>
 
