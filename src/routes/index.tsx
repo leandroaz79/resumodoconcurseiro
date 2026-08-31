@@ -216,6 +216,9 @@ function Index() {
         </div>
       </section>
 
+      <ElesPassaram />
+
+
       {/* Suporte */}
       <section className="mx-auto max-w-6xl px-5 py-20 text-center">
         <h2 className="text-display text-4xl font-bold">Precisa de ajuda?</h2>

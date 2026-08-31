@@ -38,6 +38,14 @@ export function ElesPassaram() {
             </li>
           ))}
         </ul>
+
+        <p className="mt-14 text-center text-display text-2xl font-bold uppercase leading-tight sm:text-4xl">
+          Somos{" "}
+          <span className="border-b-4 border-primary bg-primary px-2 text-primary-foreground">
+            mais de 700 aprovados
+          </span>{" "}
+          em apenas dois anos de RDC
+        </p>
       </div>
     </section>
   );
