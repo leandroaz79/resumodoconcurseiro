@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, BookOpenCheck, Download, RefreshCw, Target } from "lucide-react";
 import { ProdutoCard } from "@/components/site/ProdutoCard";
+import { ElesPassaram } from "@/components/site/ElesPassaram";
 import {
   DEPOIMENTOS,
   MATERIAL_GRATUITO_URL,
