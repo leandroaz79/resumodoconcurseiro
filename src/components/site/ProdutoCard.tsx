@@ -12,7 +12,7 @@ export function ProdutoCard({ produto }: { produto: Produto }) {
       params={{ slug: produto.slug }}
       className="group flex flex-col border border-border bg-surface transition-colors hover:border-primary"
     >
-      <div className="relative aspect-4/5 overflow-hidden bg-surface-2">
+      <div className="relative aspect-square overflow-hidden bg-surface-2">
         <img
           src={produto.capa}
           alt={`Capa do ${produto.nome}`}
