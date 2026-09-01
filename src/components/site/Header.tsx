@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { WHATSAPP_URL } from "@/data/produtos";
+import logoRdc from "@/assets/logo-rdc.png.asset.json";
 
 const NAV = [
   { to: "/", label: "Início" },
