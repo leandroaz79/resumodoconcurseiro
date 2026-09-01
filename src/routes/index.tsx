@@ -44,9 +44,9 @@ function Index() {
           className="absolute inset-0 h-full w-full object-cover opacity-40"
           style={{
             maskImage:
-              "linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0.75) 35%, rgba(0,0,0,0.15) 75%, transparent 100%)",
+              "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.15) 25%, rgba(0,0,0,0.75) 65%, rgba(0,0,0,1) 100%)",
             WebkitMaskImage:
-              "linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0.75) 35%, rgba(0,0,0,0.15) 75%, transparent 100%)",
+              "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.15) 25%, rgba(0,0,0,0.75) 65%, rgba(0,0,0,1) 100%)",
           }}
         />
         <div className="absolute inset-0 bg-background/55" aria-hidden />
