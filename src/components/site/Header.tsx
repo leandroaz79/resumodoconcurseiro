@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { WHATSAPP_URL } from "@/data/produtos";
+import logoRdc from "@/assets/logo-rdc.png.asset.json";
 
 const NAV = [
   { to: "/", label: "Início" },
@@ -14,18 +15,12 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-border/80 bg-background/85 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-6 px-5">
-        <Link to="/" className="flex items-center gap-3" onClick={() => setAberto(false)}>
-          <span className="flex size-9 items-center justify-center bg-primary text-display text-lg font-bold text-primary-foreground">
-            R
-          </span>
-          <span className="leading-none">
-            <span className="block text-display text-base font-semibold">
-              Resumo do Concurseiro
-            </span>
-            <span className="block text-[11px] uppercase tracking-[0.28em] text-muted-foreground">
-              Material RDC
-            </span>
-          </span>
+        <Link to="/" className="flex items-center" onClick={() => setAberto(false)}>
+          <img
+            src={logoRdc.url}
+            alt="Resumo do Concurseiro"
+            className="h-10 w-auto sm:h-11"
+          />
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
