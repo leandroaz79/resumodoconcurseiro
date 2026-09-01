@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, BookOpenCheck, Download, RefreshCw, Target } from "lucide-react";
 import { ProdutoCard } from "@/components/site/ProdutoCard";
 import { ElesPassaram } from "@/components/site/ElesPassaram";
+import heroPm from "@/assets/hero-pm.png.asset.json";
 import {
   DEPOIMENTOS,
   MATERIAL_GRATUITO_URL,
@@ -36,6 +37,19 @@ function Index() {
     <div>
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-border">
+        <img
+          src={heroPm.url}
+          alt=""
+          aria-hidden
+          className="absolute inset-0 h-full w-full object-cover opacity-40"
+          style={{
+            maskImage:
+              "linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0.75) 35%, rgba(0,0,0,0.15) 75%, transparent 100%)",
+            WebkitMaskImage:
+              "linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0.75) 35%, rgba(0,0,0,0.15) 75%, transparent 100%)",
+          }}
+        />
+        <div className="absolute inset-0 bg-background/55" aria-hidden />
         <div className="grid-lines absolute inset-0" aria-hidden />
         <div className="absolute -left-40 top-0 size-[520px] rounded-full bg-primary/20 blur-[140px]" aria-hidden />
         <div className="relative mx-auto max-w-6xl px-5 py-24 sm:py-32">
