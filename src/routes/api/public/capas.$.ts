@@ -6,6 +6,7 @@ export const Route = createFileRoute("/api/public/capas/$")({
     handlers: {
       GET: async ({ params }) => {
         const caminho = params["_splat"] ?? "";
+        if (!caminho || caminho.includes("..") || caminho.startsWith("/")) {
           return new Response("Caminho inválido", { status: 400 });
         }
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
