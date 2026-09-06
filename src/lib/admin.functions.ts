@@ -38,7 +38,7 @@ const produtoSchema = z.object({
 });
 
 export const salvarProduto = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireExternalAuth])
   .inputValidator((d) => produtoSchema.parse(d))
   .handler(async ({ data, context }) => {
     await exigirAdmin(context.userId, context.supabase);
@@ -66,7 +66,7 @@ export const salvarProduto = createServerFn({ method: "POST" })
   });
 
 export const excluirProduto = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireExternalAuth])
   .inputValidator((d) => z.object({ id: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     await exigirAdmin(context.userId, context.supabase);
@@ -76,7 +76,7 @@ export const excluirProduto = createServerFn({ method: "POST" })
   });
 
 export const listarProdutosAdmin = createServerFn({ method: "GET" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireExternalAuth])
   .handler(async ({ context }) => {
     await exigirAdmin(context.userId, context.supabase);
     const { data, error } = await context.supabase
@@ -88,7 +88,7 @@ export const listarProdutosAdmin = createServerFn({ method: "GET" })
   });
 
 export const salvarConteudo = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireExternalAuth])
   .inputValidator((d) =>
     z
       .object({
@@ -107,7 +107,7 @@ export const salvarConteudo = createServerFn({ method: "POST" })
   });
 
 export const uploadCapa = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireExternalAuth])
   .inputValidator((d) =>
     z
       .object({
@@ -119,7 +119,7 @@ export const uploadCapa = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     await exigirAdmin(context.userId, context.supabase);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const supabaseAdmin = createExternalAdminClient();
     const buffer = Buffer.from(data.base64, "base64");
     if (buffer.length > 4 * 1024 * 1024) throw new Error("Imagem maior que 4MB.");
     const ext = data.filename.includes(".")

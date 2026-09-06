@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { createExternalAdminClient } from "@/lib/external-supabase";
 
 // Serve imagens do bucket privado "capas" pela rota /api/public/capas/<arquivo>.
 export const Route = createFileRoute("/api/public/capas/$")({
