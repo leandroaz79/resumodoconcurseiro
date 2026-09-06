@@ -23,14 +23,14 @@ export type Produto = {
   concurso: string;
   categoria: Categoria;
   preco: number;
-  precoOriginal?: number;
+  precoOriginal?: number | undefined;
   capa: string;
   resumo: string;
-  descricao?: string;
+  descricao?: string | undefined;
   materias: string[];
-  checkoutUrl?: string;
-  destaque?: boolean;
-  ordem?: number;
+  checkoutUrl?: string | undefined;
+  destaque?: boolean | undefined;
+  ordem?: number | undefined;
 };
 
 export const CATEGORIAS: { id: Categoria; nome: string; descricao: string }[] = [
