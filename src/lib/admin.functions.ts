@@ -3,7 +3,9 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import type { Database } from "@/integrations/supabase/types";
 
-async function exigirAdmin(userId: string, supabase: ReturnType<typeof contexto>) {
+type ContextoSupabase = { from: (table: string) => any };
+
+async function exigirAdmin(userId: string, supabase: ContextoSupabase) {
   const { data, error } = await supabase
     .from("user_roles")
     .select("role")
