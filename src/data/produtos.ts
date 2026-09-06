@@ -26,7 +26,11 @@ export type Produto = {
   precoOriginal?: number;
   capa: string;
   resumo: string;
+  descricao?: string;
   materias: string[];
+  checkoutUrl?: string;
+  destaque?: boolean;
+  ordem?: number;
 };
 
 export const CATEGORIAS: { id: Categoria; nome: string; descricao: string }[] = [

@@ -32,17 +32,18 @@ export function paraProduto(row: ProdutoRow): Produto {
   };
 }
 
+const COLUNAS =
+  "slug, nome, concurso, categoria, preco, preco_original, resumo, descricao, materias, capa_url, checkout_url, destaque, ordem";
+
 export const getProdutosPublicos = createServerFn({ method: "GET" }).handler(async () => {
   const supabase = clientePublico();
   const { data, error } = await supabase
     .from("produtos")
-    .select(
-      "slug, nome, concurso, categoria, preco, preco_original, resumo, descricao, materias, capa_url, checkout_url, destaque, ordem",
-    )
+    .select(COLUNAS)
     .eq("publicado", true)
     .order("ordem", { ascending: true });
   if (error) throw error;
-  return (data ?? []).map(paraProduto);
+  return (data ?? []).map((row) => paraProduto(row as ProdutoRow));
 });
 
 export const getProdutoPublico = createServerFn({ method: "GET" })
