@@ -59,7 +59,7 @@ export const getProdutoPublico = createServerFn({ method: "GET" })
       .eq("publicado", true)
       .maybeSingle();
     if (error) throw error;
-    return row ? paraProduto(row) : null;
+    return row ? paraProduto(row as ProdutoRow) : null;
   });
 
 export type ConteudoSite = Record<string, SecaoConteudo>;
