@@ -1,0 +1,14 @@
+node_modules
+.output
+dist
+.git
+.env
+.env.*
+!.env.example
+.lovable
+.workspace
+*.log
+.DS_Store
+README.md
+Dockerfile
+.dockerignore

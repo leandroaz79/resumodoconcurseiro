@@ -12,4 +12,8 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  // Fora do ambiente Lovable (ex.: Docker no Dokploy), gera um servidor Node
+  // em .output/server/index.mjs. Dentro do Lovable este preset é ignorado
+  // automaticamente e o build continua no formato da plataforma.
+  nitro: { preset: "node-server" },
 });
