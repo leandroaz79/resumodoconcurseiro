@@ -1,17 +1,37 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { ArrowRight, BookOpenCheck, Download, RefreshCw, Target } from "lucide-react";
 import { ProdutoCard } from "@/components/site/ProdutoCard";
 import { ElesPassaram } from "@/components/site/ElesPassaram";
+import { produtosOptions, conteudoOptions } from "@/lib/queries";
 import heroPm from "@/assets/hero-pm.png.asset.json";
 import logoAguia from "@/assets/logo-aguia.png.asset.json";
-import {
-  DEPOIMENTOS,
-  MATERIAL_GRATUITO_URL,
-  PRODUTOS,
-  WHATSAPP_URL,
-} from "@/data/produtos";
+import { DEPOIMENTOS, WHATSAPP_URL } from "@/data/produtos";
 
 export const Route = createFileRoute("/")({
+  loader: async ({ context }) => {
+    await Promise.all([
+      context.queryClient.ensureQueryData(produtosOptions),
+      context.queryClient.ensureQueryData(conteudoOptions),
+    ]);
+  },
+  errorComponent: () => (
+    <div className="mx-auto max-w-6xl px-5 py-24 text-center">
+      <h1 className="text-display text-3xl font-bold">Não foi possível carregar a página</h1>
+      <p className="mt-4 text-muted-foreground">Tente recarregar em alguns instantes.</p>
+      <Link to="/" className="mt-6 inline-block text-primary underline">
+        Voltar ao início
+      </Link>
+    </div>
+  ),
+  notFoundComponent: () => (
+    <div className="mx-auto max-w-6xl px-5 py-24 text-center">
+      <h1 className="text-display text-3xl font-bold">Página não encontrada</h1>
+      <Link to="/" className="mt-6 inline-block text-primary underline">
+        Voltar ao início
+      </Link>
+    </div>
+  ),
   head: () => ({
     meta: [
       { title: "Resumo do Concurseiro | Resumos em PDF para concursos" },
@@ -26,13 +46,25 @@ export const Route = createFileRoute("/")({
         content:
           "Você não precisa estar pronto. Só precisa começar. Materiais RDC revisados e sempre atualizados.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Index,
 });
 
 function Index() {
-  const destaques = PRODUTOS.slice(0, 6);
+  const { data: produtos } = useSuspenseQuery(produtosOptions);
+  const { data: c } = useSuspenseQuery(conteudoOptions);
+  const destaques = produtos.slice(0, 6);
+  const hero = c["hero"] ?? {};
+  const beneficios = c["beneficios"] ?? {};
+  const destaquesTxt = c["destaques"] ?? {};
+  const gratuito = c["material_gratuito"] ?? {};
+  const suporte = c["suporte"] ?? {};
+  const marquee = c["marquee"] ?? {};
+  const links = c["links"] ?? {};
+  const whatsapp = links["whatsapp_url"] || WHATSAPP_URL;
 
   return (
     <div>
@@ -54,17 +86,21 @@ function Index() {
         <div className="grid-lines absolute inset-0" aria-hidden />
         <div className="absolute -left-40 top-0 size-[520px] rounded-full bg-primary/20 blur-[140px]" aria-hidden />
         <div className="relative mx-auto max-w-6xl px-5 py-24 sm:py-32">
-          <p className="text-xs uppercase tracking-[0.36em] text-primary">Materiais RDC</p>
+          <p className="text-xs uppercase tracking-[0.36em] text-primary">
+            {hero["tagline"] ?? "Materiais RDC"}
+          </p>
           <div className="mt-6 flex items-center gap-8 lg:gap-14">
             <div>
               <h1 className="max-w-3xl text-display text-5xl font-bold sm:text-7xl">
-                Você não precisa estar pronto.
+                {hero["titulo_linha1"] ?? "Você não precisa estar pronto."}
                 <br />
-                <span className="text-primary">Só precisa começar.</span>
+                <span className="text-primary">
+                  {hero["titulo_linha2"] ?? "Só precisa começar."}
+                </span>
               </h1>
               <p className="mt-6 max-w-xl text-lg text-muted-foreground">
-                Resumos em PDF, direto ao ponto, para quem estuda com pouco tempo e quer ver o
-                próprio nome na lista de aprovados.
+                {hero["subtitulo"] ??
+                  "Resumos em PDF, direto ao ponto, para quem estuda com pouco tempo e quer ver o próprio nome na lista de aprovados."}
               </p>
             </div>
             <img
@@ -77,7 +113,7 @@ function Index() {
             to="/loja"
             className="mt-10 inline-flex items-center gap-3 bg-primary px-8 py-4 text-sm font-bold uppercase tracking-wider text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Comece a estudar agora
+            {hero["cta_texto"] ?? "Comece a estudar agora"}
             <ArrowRight className="size-4" />
           </Link>
 
@@ -121,29 +157,31 @@ function Index() {
             <div>
               <RefreshCw className="size-6 text-primary" />
               <h2 className="mt-4 text-display text-2xl font-semibold">
-                Materiais atualizados
+                {beneficios["bloco1_titulo"] ?? "Materiais atualizados"}
               </h2>
               <p className="mt-2 text-muted-foreground">
-                Potencialize seus estudos com materiais revisados e sempre atualizados
-                conforme o edital e a banca.
+                {beneficios["bloco1_texto"] ??
+                  "Potencialize seus estudos com materiais revisados e sempre atualizados conforme o edital e a banca."}
               </p>
             </div>
             <div>
               <Download className="size-6 text-primary" />
-              <h2 className="mt-4 text-display text-2xl font-semibold">Download liberado</h2>
+              <h2 className="mt-4 text-display text-2xl font-semibold">
+                {beneficios["bloco2_titulo"] ?? "Download liberado"}
+              </h2>
               <p className="mt-2 text-muted-foreground">
-                Baixe nosso material e estude onde e quando quiser, no celular, tablet ou
-                impresso.
+                {beneficios["bloco2_texto"] ??
+                  "Baixe nosso material e estude onde e quando quiser, no celular, tablet ou impresso."}
               </p>
             </div>
           </div>
 
           <div className="flex flex-col justify-center border-l-2 border-primary pl-8">
             <span className="text-display text-6xl font-bold leading-none sm:text-7xl">
-              +10 mil
+              {beneficios["contador_valor"] ?? "+10 mil"}
             </span>
             <span className="mt-2 text-sm uppercase tracking-[0.28em] text-muted-foreground">
-              Membros ativos
+              {beneficios["contador_label"] ?? "Membros ativos"}
             </span>
           </div>
         </div>
@@ -153,14 +191,18 @@ function Index() {
       <section className="mx-auto max-w-6xl px-5 py-20">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-xs uppercase tracking-[0.32em] text-primary">Material completo</p>
-            <h2 className="mt-3 text-display text-4xl font-bold">Seja membro dos projetos</h2>
+            <p className="text-xs uppercase tracking-[0.32em] text-primary">
+              {destaquesTxt["kicker"] ?? "Material completo"}
+            </p>
+            <h2 className="mt-3 text-display text-4xl font-bold">
+              {destaquesTxt["titulo"] ?? "Seja membro dos projetos"}
+            </h2>
           </div>
           <Link
             to="/loja"
             className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-primary hover:underline"
           >
-            Ver todos
+            {destaquesTxt["link_texto"] ?? "Ver todos"}
             <ArrowRight className="size-4" />
           </Link>
         </div>
@@ -177,19 +219,19 @@ function Index() {
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-6 px-5 py-14">
           <div>
             <h2 className="text-display text-3xl font-bold">
-              Conheça nossos materiais gratuitos
+              {gratuito["titulo"] ?? "Conheça nossos materiais gratuitos"}
             </h2>
             <p className="mt-2 text-muted-foreground">
-              Uma amostra do padrão RDC, sem custo nenhum.
+              {gratuito["subtitulo"] ?? "Uma amostra do padrão RDC, sem custo nenhum."}
             </p>
           </div>
           <a
-            href={MATERIAL_GRATUITO_URL}
+            href={gratuito["url"] || "#"}
             target="_blank"
             rel="noreferrer"
             className="bg-primary px-8 py-4 text-sm font-bold uppercase tracking-wider text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Material gratuito
+            {gratuito["botao"] ?? "Material gratuito"}
           </a>
         </div>
       </section>
@@ -233,7 +275,7 @@ function Index() {
                   key={j}
                   className="px-8 text-display text-3xl font-bold text-primary-foreground sm:text-4xl"
                 >
-                  Eles passaram · O próximo pode ser você
+                  {marquee["texto"] ?? "Eles passaram · O próximo pode ser você"}
                 </span>
               ))}
             </div>
@@ -243,21 +285,22 @@ function Index() {
 
       <ElesPassaram />
 
-
       {/* Suporte */}
       <section className="mx-auto max-w-6xl px-5 py-20 text-center">
-        <h2 className="text-display text-4xl font-bold">Precisa de ajuda?</h2>
+        <h2 className="text-display text-4xl font-bold">
+          {suporte["titulo"] ?? "Precisa de ajuda?"}
+        </h2>
         <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-          Ao encontrar dúvidas em qualquer procedimento do site ou no material, fale
-          diretamente com a nossa equipe pelo WhatsApp.
+          {suporte["texto"] ??
+            "Ao encontrar dúvidas em qualquer procedimento do site ou no material, fale diretamente com a nossa equipe pelo WhatsApp."}
         </p>
         <a
-          href={WHATSAPP_URL}
+          href={whatsapp}
           target="_blank"
           rel="noreferrer"
           className="mt-8 inline-block bg-primary px-8 py-4 text-sm font-bold uppercase tracking-wider text-primary-foreground transition-colors hover:bg-primary/90"
         >
-          Falar no WhatsApp
+          {suporte["botao"] ?? "Falar no WhatsApp"}
         </a>
       </section>
     </div>

@@ -10,12 +10,25 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as LojaRouteImport } from './routes/loja'
 import { Route as ProdutoSlugRouteImport } from './routes/produto.$slug'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
+import { Route as ApiPublicCapasSplatRouteImport } from './routes/api/public/capas.$'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LojaRoute = LojaRouteImport.update({
@@ -28,35 +41,78 @@ const ProdutoSlugRoute = ProdutoSlugRouteImport.update({
   path: '/produto/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const ApiPublicCapasSplatRoute = ApiPublicCapasSplatRouteImport.update({
+  id: '/api/public/capas/$',
+  path: '/api/public/capas/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/loja': typeof LojaRoute
   '/produto/$slug': typeof ProdutoSlugRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/api/public/capas/$': typeof ApiPublicCapasSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/loja': typeof LojaRoute
   '/produto/$slug': typeof ProdutoSlugRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
+  '/api/public/capas/$': typeof ApiPublicCapasSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
   '/loja': typeof LojaRoute
   '/produto/$slug': typeof ProdutoSlugRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/api/public/capas/$': typeof ApiPublicCapasSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/loja' | '/produto/$slug'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/loja'
+    | '/produto/$slug'
+    | '/admin/'
+    | '/api/public/capas/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/loja' | '/produto/$slug'
-  id: '__root__' | '/' | '/loja' | '/produto/$slug'
+  to:
+    | '/'
+    | '/auth'
+    | '/loja'
+    | '/produto/$slug'
+    | '/admin'
+    | '/api/public/capas/$'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/loja'
+    | '/produto/$slug'
+    | '/_authenticated/admin/'
+    | '/api/public/capas/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
   LojaRoute: typeof LojaRoute
   ProdutoSlugRoute: typeof ProdutoSlugRoute
+  ApiPublicCapasSplatRoute: typeof ApiPublicCapasSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -66,6 +122,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/loja': {
@@ -82,13 +152,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProdutoSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/api/public/capas/$': {
+      id: '/api/public/capas/$'
+      path: '/api/public/capas/$'
+      fullPath: '/api/public/capas/$'
+      preLoaderRoute: typeof ApiPublicCapasSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
   LojaRoute: LojaRoute,
   ProdutoSlugRoute: ProdutoSlugRoute,
+  ApiPublicCapasSplatRoute: ApiPublicCapasSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
