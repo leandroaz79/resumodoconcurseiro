@@ -164,6 +164,7 @@ export function CursosAdmin() {
           onClick={() => {
             fecharForm();
             setNovo(true);
+            setSelecionado({ id: "", ...vazio() });
           }}
           className="bg-primary px-4 py-2 text-xs font-bold uppercase tracking-wider text-primary-foreground transition-colors hover:bg-primary/90"
         >
