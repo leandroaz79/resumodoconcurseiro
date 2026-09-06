@@ -1,19 +1,25 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { Check, Download, FileText, RefreshCw } from "lucide-react";
 import { ProdutoCard } from "@/components/site/ProdutoCard";
-import {
-  formatarPreco,
-  getProduto,
-  PRODUTOS,
-  WHATSAPP_URL,
-} from "@/data/produtos";
+import { produtosOptions, produtoOptions } from "@/lib/queries";
+import { formatarPreco, WHATSAPP_URL } from "@/data/produtos";
 
 export const Route = createFileRoute("/produto/$slug")({
-  loader: ({ params }) => {
-    const produto = getProduto(params.slug);
+  loader: async ({ params, context }) => {
+    const produto = await context.queryClient.ensureQueryData(produtoOptions(params.slug));
     if (!produto) throw notFound();
     return { produto };
   },
+  errorComponent: () => (
+    <div className="mx-auto max-w-6xl px-5 py-24 text-center">
+      <h1 className="text-display text-3xl font-bold">Não foi possível carregar o material</h1>
+      <p className="mt-4 text-muted-foreground">Tente recarregar em alguns instantes.</p>
+      <Link to="/loja" className="mt-6 inline-block text-primary underline">
+        Voltar à loja
+      </Link>
+    </div>
+  ),
   head: ({ loaderData }) => {
     if (!loaderData) {
       return {
@@ -27,8 +33,8 @@ export const Route = createFileRoute("/produto/$slug")({
         { name: "description", content: produto.resumo },
         { property: "og:title", content: `${produto.nome} | Resumo do Concurseiro` },
         { property: "og:description", content: produto.resumo },
-        { property: "og:image", content: produto.capa },
-        { name: "twitter:image", content: produto.capa },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
       ],
     };
   },
@@ -37,7 +43,9 @@ export const Route = createFileRoute("/produto/$slug")({
 
 function ProdutoPage() {
   const { produto } = Route.useLoaderData();
-  const relacionados = PRODUTOS.filter((p) => p.slug !== produto.slug).slice(0, 3);
+  const { data: produtos } = useSuspenseQuery(produtosOptions);
+  const relacionados = produtos.filter((p) => p.slug !== produto.slug).slice(0, 3);
+  const whatsapp = WHATSAPP_URL;
 
   return (
     <div className="mx-auto max-w-6xl px-5 py-14">
@@ -80,14 +88,27 @@ function ProdutoPage() {
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
-            <button
-              type="button"
-              className="bg-primary px-8 py-4 text-sm font-bold uppercase tracking-wider text-primary-foreground transition-colors hover:bg-primary/90"
-            >
-              Comprar agora
-            </button>
+            {produto.checkoutUrl ? (
+              <a
+                href={produto.checkoutUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="bg-primary px-8 py-4 text-sm font-bold uppercase tracking-wider text-primary-foreground transition-colors hover:bg-primary/90"
+              >
+                Comprar agora
+              </a>
+            ) : (
+              <a
+                href={whatsapp}
+                target="_blank"
+                rel="noreferrer"
+                className="bg-primary px-8 py-4 text-sm font-bold uppercase tracking-wider text-primary-foreground transition-colors hover:bg-primary/90"
+              >
+                Comprar agora
+              </a>
+            )}
             <a
-              href={WHATSAPP_URL}
+              href={whatsapp}
               target="_blank"
               rel="noreferrer"
               className="border border-border px-8 py-4 text-sm font-bold uppercase tracking-wider transition-colors hover:border-primary hover:text-primary"
@@ -120,6 +141,15 @@ function ProdutoPage() {
               ))}
             </ul>
           </div>
+
+          {produto.descricao && (
+            <div className="mt-10">
+              <h2 className="text-display text-2xl font-semibold">Sobre o material</h2>
+              <p className="mt-4 whitespace-pre-line text-sm leading-relaxed text-muted-foreground">
+                {produto.descricao}
+              </p>
+            </div>
+          )}
         </div>
       </div>
 

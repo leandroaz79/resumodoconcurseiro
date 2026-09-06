@@ -1,9 +1,29 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { ProdutoCard } from "@/components/site/ProdutoCard";
-import { CATEGORIAS, PRODUTOS, type Categoria } from "@/data/produtos";
+import { produtosOptions } from "@/lib/queries";
+import { CATEGORIAS, type Categoria } from "@/data/produtos";
 
 export const Route = createFileRoute("/loja")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(produtosOptions),
+  errorComponent: () => (
+    <div className="mx-auto max-w-6xl px-5 py-24 text-center">
+      <h1 className="text-display text-3xl font-bold">Não foi possível carregar a loja</h1>
+      <p className="mt-4 text-muted-foreground">Tente recarregar em alguns instantes.</p>
+      <Link to="/" className="mt-6 inline-block text-primary underline">
+        Voltar ao início
+      </Link>
+    </div>
+  ),
+  notFoundComponent: () => (
+    <div className="mx-auto max-w-6xl px-5 py-24 text-center">
+      <h1 className="text-display text-3xl font-bold">Página não encontrada</h1>
+      <Link to="/" className="mt-6 inline-block text-primary underline">
+        Voltar ao início
+      </Link>
+    </div>
+  ),
   head: () => ({
     meta: [
       { title: "Materiais para concursos | Resumo do Concurseiro" },
@@ -18,6 +38,8 @@ export const Route = createFileRoute("/loja")({
         content:
           "Projetos completos e matérias isoladas em PDF, direto ao ponto, para você estudar onde e quando quiser.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Loja,
@@ -27,7 +49,9 @@ type Filtro = "todos" | Categoria;
 
 function Loja() {
   const [filtro, setFiltro] = useState<Filtro>("todos");
-  const lista = filtro === "todos" ? PRODUTOS : PRODUTOS.filter((p) => p.categoria === filtro);
+  const { data: produtos } = useSuspenseQuery(produtosOptions);
+  const lista =
+    filtro === "todos" ? produtos : produtos.filter((p) => p.categoria === filtro);
 
   return (
     <div className="mx-auto max-w-6xl px-5 py-16">
