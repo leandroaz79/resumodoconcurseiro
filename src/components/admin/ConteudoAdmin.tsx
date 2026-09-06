@@ -70,7 +70,7 @@ export function ConteudoAdmin() {
       {mensagem && <p className="border border-border bg-surface p-3 text-sm">{mensagem}</p>}
 
       {SECOES_META.map((secao) => {
-        const editada = rascunho[secao.id] && Object.keys(rascunho[secao.id]).length > 0;
+        const editada = Object.keys(rascunho[secao.id] ?? {}).length > 0;
         return (
           <section key={secao.id} className="border border-border bg-surface p-6">
             <div className="flex items-center justify-between">
