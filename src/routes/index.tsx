@@ -3,6 +3,7 @@ import { ArrowRight, BookOpenCheck, Download, RefreshCw, Target } from "lucide-r
 import { ProdutoCard } from "@/components/site/ProdutoCard";
 import { ElesPassaram } from "@/components/site/ElesPassaram";
 import heroPm from "@/assets/hero-pm.png.asset.json";
+import logoAguia from "@/assets/logo-aguia.png.asset.json";
 import {
   DEPOIMENTOS,
   MATERIAL_GRATUITO_URL,
@@ -54,15 +55,24 @@ function Index() {
         <div className="absolute -left-40 top-0 size-[520px] rounded-full bg-primary/20 blur-[140px]" aria-hidden />
         <div className="relative mx-auto max-w-6xl px-5 py-24 sm:py-32">
           <p className="text-xs uppercase tracking-[0.36em] text-primary">Materiais RDC</p>
-          <h1 className="mt-6 max-w-3xl text-display text-5xl font-bold sm:text-7xl">
-            Você não precisa estar pronto.
-            <br />
-            <span className="text-primary">Só precisa começar.</span>
-          </h1>
-          <p className="mt-6 max-w-xl text-lg text-muted-foreground">
-            Resumos em PDF, direto ao ponto, para quem estuda com pouco tempo e quer ver o
-            próprio nome na lista de aprovados.
-          </p>
+          <div className="mt-6 flex items-center gap-8 lg:gap-14">
+            <div>
+              <h1 className="max-w-3xl text-display text-5xl font-bold sm:text-7xl">
+                Você não precisa estar pronto.
+                <br />
+                <span className="text-primary">Só precisa começar.</span>
+              </h1>
+              <p className="mt-6 max-w-xl text-lg text-muted-foreground">
+                Resumos em PDF, direto ao ponto, para quem estuda com pouco tempo e quer ver o
+                próprio nome na lista de aprovados.
+              </p>
+            </div>
+            <img
+              src={logoAguia.url}
+              alt="Emblema Resumo do Concurseiro"
+              className="hidden w-40 shrink-0 drop-shadow-[0_0_30px_rgba(255,255,255,0.12)] sm:block md:w-56 lg:w-72"
+            />
+          </div>
           <Link
             to="/loja"
             className="mt-10 inline-flex items-center gap-3 bg-primary px-8 py-4 text-sm font-bold uppercase tracking-wider text-primary-foreground transition-colors hover:bg-primary/90"
