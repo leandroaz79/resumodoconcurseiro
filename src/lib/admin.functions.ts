@@ -65,10 +65,10 @@ export const salvarProduto = createServerFn({ method: "POST" })
 
 export const excluirProduto = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: { id: string }) => z.string().uuid().parse(d.id))
+  .inputValidator((d) => z.object({ id: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     await exigirAdmin(context.userId, context.supabase);
-    const { error } = await context.supabase.from("produtos").delete().eq("id", data);
+    const { error } = await context.supabase.from("produtos").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });
@@ -123,11 +123,11 @@ export const uploadCapa = createServerFn({ method: "POST" })
     const ext = data.filename.includes(".")
       ? data.filename.split(".").pop()!.toLowerCase().replace(/[^a-z0-9]/g, "")
       : "webp";
-    const path = `capas/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext || "webp"}`;
+    const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext || "webp"}`;
     const { error } = await supabaseAdmin.storage
       .from("capas")
       .upload(path, buffer, { contentType: data.contentType, upsert: false });
     if (error) throw new Error(error.message);
-    const url = `${process.env["SUPABASE_URL"]}/storage/v1/object/public/capas/${path}`;
-    return { url };
+    // Bucket privado: as imagens são servidas pela rota interna /api/public/capas
+    return { url: `/api/public/capas/${path}` };
   });
