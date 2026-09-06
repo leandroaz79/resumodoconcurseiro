@@ -58,11 +58,11 @@ function ProdutoPage() {
       </nav>
 
       <div className="mt-8 grid gap-12 lg:grid-cols-[minmax(0,420px)_1fr]">
-        <div className="border border-border bg-surface">
+        <div className="self-start border border-border bg-surface">
           <img
             src={produto.capa}
             alt={`Capa do ${produto.nome}`}
-            className="aspect-square w-full object-cover"
+            className="h-auto w-full"
           />
         </div>
 
