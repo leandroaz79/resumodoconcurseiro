@@ -51,8 +51,8 @@ export function CursosAdmin() {
     queryFn: listarProdutosAdmin,
   });
 
-  const form = novo || selecionado;
-  const atual = selecionado ?? (novo ? vazio() : null);
+  const form = novo || !!selecionado;
+  const atual = selecionado;
 
   function fecharForm() {
     setSelecionado(null);
@@ -61,12 +61,6 @@ export function CursosAdmin() {
   }
 
   function campo<K extends keyof ProdutoAdmin>(chave: K, valor: ProdutoAdmin[K]) {
-    if (novo) {
-      setNovo(false);
-      setSelecionado({ ...vazio(), id: "" as unknown as string } as ProdutoAdmin);
-      // reabre como novo com valor
-      setTimeout(() => setNovo(false), 0);
-    }
     if (selecionado) {
       setSelecionado({ ...selecionado, [chave]: valor });
     }
@@ -79,24 +73,26 @@ export function CursosAdmin() {
     setMensagem("");
     try {
       await salvarProduto({
-        id: selecionado.id || undefined,
-        slug: selecionado.slug,
-        nome: selecionado.nome,
-        concurso: selecionado.concurso,
-        categoria: selecionado.categoria === "isoladas" ? "isoladas" : "projetos",
-        preco: Number(selecionado.preco) || 0,
-        precoOriginal:
-          selecionado.preco_original != null && Number(selecionado.preco_original) > 0
-            ? Number(selecionado.preco_original)
-            : null,
-        resumo: selecionado.resumo,
-        descricao: selecionado.descricao,
-        materias: selecionado.materias,
-        capaUrl: selecionado.capa_url,
-        checkoutUrl: selecionado.checkout_url,
-        destaque: selecionado.destaque,
-        ordem: Number(selecionado.ordem) || 0,
-        publicado: selecionado.publicado,
+        data: {
+          id: selecionado.id || undefined,
+          slug: selecionado.slug,
+          nome: selecionado.nome,
+          concurso: selecionado.concurso,
+          categoria: selecionado.categoria === "isoladas" ? "isoladas" : "projetos",
+          preco: Number(selecionado.preco) || 0,
+          precoOriginal:
+            selecionado.preco_original != null && Number(selecionado.preco_original) > 0
+              ? Number(selecionado.preco_original)
+              : null,
+          resumo: selecionado.resumo,
+          descricao: selecionado.descricao,
+          materias: selecionado.materias,
+          capaUrl: selecionado.capa_url,
+          checkoutUrl: selecionado.checkout_url,
+          destaque: selecionado.destaque,
+          ordem: Number(selecionado.ordem) || 0,
+          publicado: selecionado.publicado,
+        },
       });
       await queryClient.invalidateQueries({ queryKey: ["admin-produtos"] });
       await queryClient.invalidateQueries({ queryKey: ["produtos"] });
@@ -111,7 +107,7 @@ export function CursosAdmin() {
   async function excluir(p: ProdutoAdmin) {
     if (!window.confirm(`Excluir "${p.nome}"? Esta ação não pode ser desfeita.`)) return;
     try {
-      await excluirProduto({ id: p.id });
+      await excluirProduto({ data: { id: p.id } });
       await queryClient.invalidateQueries({ queryKey: ["admin-produtos"] });
       await queryClient.invalidateQueries({ queryKey: ["produtos"] });
       if (selecionado?.id === p.id) fecharForm();
@@ -136,9 +132,11 @@ export function CursosAdmin() {
         reader.readAsDataURL(file);
       });
       const { url } = await uploadCapa({
-        filename: file.name,
-        base64,
-        contentType: file.type || "image/webp",
+        data: {
+          filename: file.name,
+          base64,
+          contentType: file.type || "image/webp",
+        },
       });
       setSelecionado({ ...selecionado, capa_url: url });
       setMensagem("Imagem carregada. Clique em Salvar para confirmar.");
