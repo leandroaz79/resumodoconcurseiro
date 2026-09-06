@@ -6,8 +6,8 @@ import type { Produto } from "@/data/produtos";
 
 function clientePublico() {
   return createClient<Database>(
-    process.env["SUPABASE_URL"]!,
-    process.env["SUPABASE_PUBLISHABLE_KEY"]!,
+    process.env["EXTERNAL_SUPABASE_URL"]!,
+    process.env["EXTERNAL_SUPABASE_ANON_KEY"]!,
     { auth: { persistSession: false, autoRefreshToken: false, storage: undefined } },
   );
 }

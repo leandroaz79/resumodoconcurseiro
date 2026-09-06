@@ -3,7 +3,7 @@ import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { CursosAdmin } from "@/components/admin/CursosAdmin";
 import { ConteudoAdmin } from "@/components/admin/ConteudoAdmin";
-import { supabase } from "@/integrations/supabase/client";
+import { externalSupabase as supabase } from "@/lib/external-supabase";
 
 export const Route = createFileRoute("/_authenticated/admin/")({
   ssr: false,

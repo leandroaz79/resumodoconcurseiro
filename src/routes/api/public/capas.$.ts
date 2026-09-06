@@ -9,7 +9,7 @@ export const Route = createFileRoute("/api/public/capas/$")({
         if (!caminho || caminho.includes("..") || caminho.startsWith("/")) {
           return new Response("Caminho inválido", { status: 400 });
         }
-        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+        const supabaseAdmin = createExternalAdminClient();
         const { data, error } = await supabaseAdmin.storage.from("capas").download(caminho);
         if (error || !data) {
           return new Response("Imagem não encontrada", { status: 404 });

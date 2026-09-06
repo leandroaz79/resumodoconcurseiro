@@ -1,7 +1,9 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { requireExternalAuth } from "./external-auth";
+import { createExternalAdminClient } from "./external-supabase";
 import type { Database } from "@/integrations/supabase/types";
+
 
 type ContextoSupabase = { from: (table: string) => any };
 

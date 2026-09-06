@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { externalSupabase as supabase } from "@/lib/external-supabase";
 import logoRdc from "@/assets/logo-rdc.png.asset.json";
 
 export const Route = createFileRoute("/auth")({
