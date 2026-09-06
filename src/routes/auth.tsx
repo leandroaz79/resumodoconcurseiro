@@ -26,6 +26,7 @@ function AuthPage() {
   const [erro, setErro] = useState("");
   const [aviso, setAviso] = useState("");
   const [carregando, setCarregando] = useState(false);
+  const [mostrarSenha, setMostrarSenha] = useState(false);
 
   async function enviar(e: React.FormEvent) {
     e.preventDefault();
@@ -76,14 +77,24 @@ function AuthPage() {
           </label>
           <label className="flex flex-col gap-1.5 text-sm">
             <span className="text-muted-foreground">Senha</span>
-            <input
-              type="password"
-              required
-              minLength={6}
-              value={senha}
-              onChange={(e) => setSenha(e.target.value)}
-              className="border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-primary"
-            />
+            <div className="relative">
+              <input
+                type={mostrarSenha ? "text" : "password"}
+                required
+                minLength={6}
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
+                className="w-full border border-border bg-background px-3 py-2.5 pr-10 text-sm outline-none focus:border-primary"
+              />
+              <button
+                type="button"
+                onClick={() => setMostrarSenha((v) => !v)}
+                aria-label={mostrarSenha ? "Ocultar senha" : "Mostrar senha"}
+                className="absolute inset-y-0 right-0 flex w-10 items-center justify-center text-muted-foreground hover:text-foreground"
+              >
+                {mostrarSenha ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+              </button>
+            </div>
           </label>
 
           {erro && <p className="text-sm text-red-400">{erro}</p>}
