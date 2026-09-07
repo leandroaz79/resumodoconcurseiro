@@ -27,7 +27,6 @@ type ProdutoAdmin = {
   publicado: boolean;
 };
 
-const vazio = (): Omit<ProdutoAdmin, "id"> => ({
 const normalizarSlug = (valor: string) =>
   valor
     .toLowerCase()
@@ -37,6 +36,7 @@ const normalizarSlug = (valor: string) =>
     .replace(/[^a-z0-9-]/g, "")
     .replace(/-+/g, "-");
 
+const vazio = (): Omit<ProdutoAdmin, "id"> => ({
   slug: "",
   nome: "",
   concurso: "",
