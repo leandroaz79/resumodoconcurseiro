@@ -1,18 +1,18 @@
-import f01 from "@/assets/aprovados/aprovado-01.webp.asset.json";
-import f02 from "@/assets/aprovados/aprovado-02.webp.asset.json";
-import f03 from "@/assets/aprovados/aprovado-03.webp.asset.json";
-import f04 from "@/assets/aprovados/aprovado-04.webp.asset.json";
-import f05 from "@/assets/aprovados/aprovado-05.webp.asset.json";
-import f06 from "@/assets/aprovados/aprovado-06.webp.asset.json";
-import f07 from "@/assets/aprovados/aprovado-07.webp.asset.json";
-import f08 from "@/assets/aprovados/aprovado-08.webp.asset.json";
-import f09 from "@/assets/aprovados/aprovado-09.webp.asset.json";
-import f10 from "@/assets/aprovados/aprovado-10.webp.asset.json";
-import f11 from "@/assets/aprovados/aprovado-11.webp.asset.json";
-import f12 from "@/assets/aprovados/aprovado-12.webp.asset.json";
-import f13 from "@/assets/aprovados/aprovado-13.webp.asset.json";
-import f14 from "@/assets/aprovados/aprovado-14.webp.asset.json";
-import f15 from "@/assets/aprovados/aprovado-15.webp.asset.json";
+const f01 = { url: "/img/aprovado-01.webp" };
+const f02 = { url: "/img/aprovado-02.webp" };
+const f03 = { url: "/img/aprovado-03.webp" };
+const f04 = { url: "/img/aprovado-04.webp" };
+const f05 = { url: "/img/aprovado-05.webp" };
+const f06 = { url: "/img/aprovado-06.webp" };
+const f07 = { url: "/img/aprovado-07.webp" };
+const f08 = { url: "/img/aprovado-08.webp" };
+const f09 = { url: "/img/aprovado-09.webp" };
+const f10 = { url: "/img/aprovado-10.webp" };
+const f11 = { url: "/img/aprovado-11.webp" };
+const f12 = { url: "/img/aprovado-12.webp" };
+const f13 = { url: "/img/aprovado-13.webp" };
+const f14 = { url: "/img/aprovado-14.webp" };
+const f15 = { url: "/img/aprovado-15.webp" };
 
 export type Aprovado = {
   nome: string;

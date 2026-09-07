@@ -4,8 +4,8 @@ import { ArrowRight, BookOpenCheck, Download, RefreshCw, Target } from "lucide-r
 import { ProdutoCard } from "@/components/site/ProdutoCard";
 import { ElesPassaram } from "@/components/site/ElesPassaram";
 import { produtosOptions, conteudoOptions } from "@/lib/queries";
-import heroPm from "@/assets/hero-pm.png.asset.json";
-import logoAguia from "@/assets/logo-aguia.png.asset.json";
+const heroPm = { url: "/img/hero-pm.png" };
+const logoAguia = { url: "/img/logo-aguia.png" };
 import { DEPOIMENTOS, WHATSAPP_URL } from "@/data/produtos";
 
 export const Route = createFileRoute("/")({

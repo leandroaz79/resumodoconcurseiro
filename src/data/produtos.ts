@@ -1,19 +1,19 @@
-import capa1 from "@/assets/capas/capa-projeto-guardamunicipaltamandare.webp.asset.json";
-import capa2 from "@/assets/capas/capa-projeto-policiapenaldepernambuco.webp.asset.json";
-import capa3 from "@/assets/capas/capa-projeto-pp-rn.webp.asset.json";
-import capa4 from "@/assets/capas/capa-projeto-gcm-natal.webp.asset.json";
-import capa5 from "@/assets/capas/capa-projeto-cabodesantoagostinho.webp.asset.json";
-import capa6 from "@/assets/capas/capa-projeto-policia-militar-de-pernambuco.webp.asset.json";
-import capa7 from "@/assets/capas/capa-projeto-guarda-civil-municipal-recife.webp.asset.json";
-import capa8 from "@/assets/capas/capa-projeto-policia-militar-de-alagoas.webp.asset.json";
-import capa9 from "@/assets/capas/capa-projeto-guarda-civil-municipal-de-campina-grande.webp.asset.json";
-import capa10 from "@/assets/capas/capa-projeto-policia-penal-da-paraiba.webp.asset.json";
-import dep1 from "@/assets/depoimentos/depoimento-01.webp.asset.json";
-import dep2 from "@/assets/depoimentos/depoimento-02.webp.asset.json";
-import dep3 from "@/assets/depoimentos/depoimento-03.webp.asset.json";
-import dep4 from "@/assets/depoimentos/depoimento-04.webp.asset.json";
-import dep5 from "@/assets/depoimentos/depoimento-05.webp.asset.json";
-import dep6 from "@/assets/depoimentos/depoimento-06.webp.asset.json";
+const capa1 = { url: "/img/capa-projeto-guardamunicipaltamandare.webp" };
+const capa2 = { url: "/img/capa-projeto-policiapenaldepernambuco.webp" };
+const capa3 = { url: "/img/capa-projeto-pp-rn.webp" };
+const capa4 = { url: "/img/capa-projeto-gcm-natal.webp" };
+const capa5 = { url: "/img/capa-projeto-cabodesantoagostinho.webp" };
+const capa6 = { url: "/img/capa-projeto-policia-militar-de-pernambuco.webp" };
+const capa7 = { url: "/img/capa-projeto-guarda-civil-municipal-recife.webp" };
+const capa8 = { url: "/img/capa-projeto-policia-militar-de-alagoas.webp" };
+const capa9 = { url: "/img/capa-projeto-guarda-civil-municipal-de-campina-grande.webp" };
+const capa10 = { url: "/img/capa-projeto-policia-penal-da-paraiba.webp" };
+const dep1 = { url: "/img/depoimento-01.webp" };
+const dep2 = { url: "/img/depoimento-02.webp" };
+const dep3 = { url: "/img/depoimento-03.webp" };
+const dep4 = { url: "/img/depoimento-04.webp" };
+const dep5 = { url: "/img/depoimento-05.webp" };
+const dep6 = { url: "/img/depoimento-06.webp" };
 
 export type Categoria = "projetos" | "isoladas";
 

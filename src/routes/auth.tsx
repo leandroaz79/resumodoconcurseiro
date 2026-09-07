@@ -2,7 +2,7 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { externalSupabase as supabase } from "@/lib/external-supabase";
-import logoRdc from "@/assets/logo-rdc.png.asset.json";
+const logoRdc = { url: "/img/logo-rdc.png" };
 
 export const Route = createFileRoute("/auth")({
   ssr: false,
