@@ -3,13 +3,17 @@ import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 import { CONTEUDO_PADRAO, type SecaoConteudo } from "@/data/conteudo";
 import type { Produto } from "@/data/produtos";
+import {
+  EXTERNAL_SUPABASE_ANON_KEY,
+  EXTERNAL_SUPABASE_URL,
+  createSupabaseFetch,
+} from "./external-supabase";
 
 function clientePublico() {
-  return createClient<Database>(
-    process.env["EXTERNAL_SUPABASE_URL"]!,
-    process.env["EXTERNAL_SUPABASE_ANON_KEY"]!,
-    { auth: { persistSession: false, autoRefreshToken: false, storage: undefined } },
-  );
+  return createClient<Database>(EXTERNAL_SUPABASE_URL, EXTERNAL_SUPABASE_ANON_KEY, {
+    global: { fetch: createSupabaseFetch(EXTERNAL_SUPABASE_ANON_KEY) },
+    auth: { persistSession: false, autoRefreshToken: false, storage: undefined },
+  });
 }
 
 type ProdutoRow = Database["public"]["Tables"]["produtos"]["Row"];
