@@ -28,6 +28,15 @@ type ProdutoAdmin = {
 };
 
 const vazio = (): Omit<ProdutoAdmin, "id"> => ({
+const normalizarSlug = (valor: string) =>
+  valor
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9-]/g, "")
+    .replace(/-+/g, "-");
+
   slug: "",
   nome: "",
   concurso: "",
