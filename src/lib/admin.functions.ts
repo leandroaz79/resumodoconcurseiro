@@ -84,8 +84,14 @@ export const listarProdutosAdmin = createServerFn({ method: "GET" })
       .select("*")
       .order("ordem", { ascending: true });
     if (error) throw new Error(error.message);
-    return data ?? [];
+    return (data ?? []).map((row) => ({
+      ...row,
+      capa_url: /^\/__l5e\/assets-v1\/[^/]+\/(.+)$/.test(row.capa_url)
+        ? `/img/${row.capa_url.split("/").pop()}`
+        : row.capa_url,
+    }));
   });
+
 
 export const salvarConteudo = createServerFn({ method: "POST" })
   .middleware([requireExternalAuth])

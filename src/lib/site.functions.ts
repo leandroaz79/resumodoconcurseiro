@@ -14,6 +14,12 @@ function clientePublico() {
 
 type ProdutoRow = Database["public"]["Tables"]["produtos"]["Row"];
 
+// Capas antigas apontavam para o CDN do Lovable; agora as imagens ficam em /img.
+function normalizarCapa(url: string) {
+  const m = /^\/__l5e\/assets-v1\/[^/]+\/(.+)$/.exec(url ?? "");
+  return m ? `/img/${m[1]}` : url;
+}
+
 export function paraProduto(row: ProdutoRow): Produto {
   return {
     slug: row.slug,
@@ -22,7 +28,8 @@ export function paraProduto(row: ProdutoRow): Produto {
     categoria: row.categoria as Produto["categoria"],
     preco: Number(row.preco),
     precoOriginal: row.preco_original != null ? Number(row.preco_original) : undefined,
-    capa: row.capa_url,
+    capa: normalizarCapa(row.capa_url),
+
     resumo: row.resumo,
     descricao: row.descricao || undefined,
     materias: row.materias ?? [],
