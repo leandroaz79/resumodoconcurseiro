@@ -139,3 +139,71 @@ export const uploadCapa = createServerFn({ method: "POST" })
     // Bucket privado: as imagens são servidas pela rota interna /api/public/capas
     return { url: `/api/public/capas/${path}` };
   });
+
+export const listarAdmins = createServerFn({ method: "GET" })
+  .middleware([requireExternalAuth])
+  .handler(async ({ context }) => {
+    await exigirAdmin(context.userId, context.supabase);
+    const supabaseAdmin = createExternalAdminClient();
+    const { data: papeis, error } = await supabaseAdmin
+      .from("user_roles")
+      .select("user_id")
+      .eq("role", "admin");
+    if (error) throw new Error(error.message);
+    const admins = await Promise.all(
+      (papeis ?? []).map(async ({ user_id }) => {
+        const { data: userData } = await supabaseAdmin.auth.admin.getUserById(user_id);
+        return { id: user_id, email: userData?.user?.email ?? "(sem e-mail)" };
+      }),
+    );
+    return admins;
+  });
+
+export const criarAdmin = createServerFn({ method: "POST" })
+  .middleware([requireExternalAuth])
+  .inputValidator((d) =>
+    z
+      .object({
+        email: z.string().trim().email("E-mail inválido").max(255),
+        senha: z.string().min(6, "A senha precisa de pelo menos 6 caracteres").max(72),
+      })
+      .parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    await exigirAdmin(context.userId, context.supabase);
+    const supabaseAdmin = createExternalAdminClient();
+    const { data: criado, error: erroCriacao } = await supabaseAdmin.auth.admin.createUser({
+      email: data.email,
+      password: data.senha,
+      email_confirm: true,
+    });
+    if (erroCriacao) {
+      throw new Error(
+        erroCriacao.message.toLowerCase().includes("already")
+          ? "Já existe uma conta com este e-mail. Se ela já é sua, peça para outro admin promovê-la."
+          : erroCriacao.message,
+      );
+    }
+    const { error: erroPapel } = await supabaseAdmin
+      .from("user_roles")
+      .insert({ user_id: criado.user.id, role: "admin" });
+    if (erroPapel) throw new Error(erroPapel.message);
+    return { ok: true };
+  });
+
+export const removerAdmin = createServerFn({ method: "POST" })
+  .middleware([requireExternalAuth])
+  .inputValidator((d) => z.object({ userId: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await exigirAdmin(context.userId, context.supabase);
+    if (data.userId === context.userId)
+      throw new Error("Você não pode remover o seu próprio acesso.");
+    const supabaseAdmin = createExternalAdminClient();
+    const { error } = await supabaseAdmin
+      .from("user_roles")
+      .delete()
+      .eq("user_id", data.userId)
+      .eq("role", "admin");
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });

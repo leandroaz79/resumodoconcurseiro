@@ -3,6 +3,7 @@ import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { CursosAdmin } from "@/components/admin/CursosAdmin";
 import { ConteudoAdmin } from "@/components/admin/ConteudoAdmin";
+import { AdminsAdmin } from "@/components/admin/AdminsAdmin";
 import { externalSupabase as supabase } from "@/lib/external-supabase";
 
 export const Route = createFileRoute("/_authenticated/admin/")({
@@ -14,7 +15,7 @@ export const Route = createFileRoute("/_authenticated/admin/")({
 });
 
 function AdminPage() {
-  const [aba, setAba] = useState<"cursos" | "conteudo">("cursos");
+  const [aba, setAba] = useState<"cursos" | "conteudo" | "admins">("cursos");
 
   async function sair() {
     await supabase.auth.signOut();
@@ -48,6 +49,7 @@ function AdminPage() {
           [
             { id: "cursos" as const, nome: "Cursos" },
             { id: "conteudo" as const, nome: "Textos do site" },
+            { id: "admins" as const, nome: "Administradores" },
           ]
         ).map((item) => (
           <button
@@ -65,7 +67,9 @@ function AdminPage() {
         ))}
       </div>
 
-      <div className="mt-8">{aba === "cursos" ? <CursosAdmin /> : <ConteudoAdmin />}</div>
+      <div className="mt-8">
+        {aba === "cursos" ? <CursosAdmin /> : aba === "conteudo" ? <ConteudoAdmin /> : <AdminsAdmin />}
+      </div>
     </div>
   );
 }
