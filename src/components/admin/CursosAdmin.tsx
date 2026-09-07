@@ -301,7 +301,7 @@ function FormularioCurso({
         </Campo>
         <Campo rotulo="Endereço (slug) — letras minúsculas e hífens">
           <input className={inputCls} required pattern="[a-z0-9-]+" value={atual.slug}
-            onChange={(e) => onCampo("slug", e.target.value)} />
+            onChange={(e) => onCampo("slug", normalizarSlug(e.target.value))} />
         </Campo>
         <Campo rotulo="Categoria">
           <select className={inputCls} value={atual.categoria}
