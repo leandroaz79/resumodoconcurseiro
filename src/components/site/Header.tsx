@@ -3,6 +3,7 @@ import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { WHATSAPP_URL } from "@/data/produtos";
 const logoRdc = { url: "/img/logo-rdc.png" };
+const AREA_MEMBROS_URL = "https://app.resumodoconcurseiro.com.br";
 
 const NAV = [
   { to: "/", label: "Início" },
@@ -24,7 +25,26 @@ export function Header() {
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
-          {NAV.map((item) => (
+          {NAV.slice(0, 1).map((item) => (
+            <Link
+              key={item.to}
+              to={item.to}
+              activeOptions={{ exact: item.to === "/" }}
+              className="text-sm font-medium uppercase tracking-wide text-muted-foreground transition-colors hover:text-foreground"
+              activeProps={{ className: "text-foreground" }}
+            >
+              {item.label}
+            </Link>
+          ))}
+          <a
+            href={AREA_MEMBROS_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="text-sm font-medium uppercase tracking-wide text-muted-foreground transition-colors hover:text-foreground"
+          >
+            Área de membros
+          </a>
+          {NAV.slice(1).map((item) => (
             <Link
               key={item.to}
               to={item.to}
@@ -58,7 +78,26 @@ export function Header() {
       {aberto && (
         <div className="border-t border-border bg-background px-5 py-4 md:hidden">
           <nav className="flex flex-col gap-4">
-            {NAV.map((item) => (
+            {NAV.slice(0, 1).map((item) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                onClick={() => setAberto(false)}
+                className="text-sm font-medium uppercase tracking-wide text-muted-foreground"
+                activeProps={{ className: "text-foreground" }}
+              >
+                {item.label}
+              </Link>
+            ))}
+            <a
+              href={AREA_MEMBROS_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="text-sm font-medium uppercase tracking-wide text-muted-foreground"
+            >
+              Área de membros
+            </a>
+            {NAV.slice(1).map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
